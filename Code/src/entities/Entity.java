@@ -9,18 +9,20 @@ import components.Component;
 public class Entity {
 
 	private String name;
+	private Tag tag;
 	private int x, y, width, height;
 	private int rotX, rotY, rotDir, rotVel;
 	private boolean rotating;
 	public List<Component> components = new ArrayList<>();
 	
-	public Entity(String name, int x, int y, int width, int height, List<Component> components) {
+	public Entity(String name, int x, int y, int width, int height, List<Component> components, Tag tag) {
 		this.name = name;
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
 		this.components = components;
+		this.tag = tag;
 		
 		if(this.components.size() > 0) {
 			for(Component component : this.components) {
@@ -55,6 +57,16 @@ public class Entity {
 		}
 		
 		return null;
+	}
+	
+	public boolean allowedEntity(Entity collisionEntity, List<Tag> allowedTags) {
+		for(Tag tag : allowedTags) {
+			if(collisionEntity.getTag() == tag) {
+				return true;
+			}
+		}
+	
+		return false;
 	}
 	
 	private Rectangle collisionBox;
@@ -151,5 +163,13 @@ public class Entity {
 
 	public void setRotVel(int rotVel) {
 		this.rotVel = rotVel;
+	}
+
+	public Tag getTag() {
+		return tag;
+	}
+
+	public void setTag(Tag tag) {
+		this.tag = tag;
 	}
 }

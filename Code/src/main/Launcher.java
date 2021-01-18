@@ -7,18 +7,21 @@ import java.awt.image.BufferStrategy;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import components.CollisionComponent;
 import components.Component;
 import components.PhysicsComponent;
 import components.ShapeComponent;
+import components.SpriteComponent;
 import entities.Entity;
 import entities.EntityManager;
+import entities.Tag;
 
 public class Launcher extends Canvas implements Runnable {
 	
 	private static final long serialVersionUID = 1L;
-	public static final int SCREEN_WIDTH = 1280, SCREEN_HEIGHT = 720;
+	public static final int SCREEN_WIDTH = 1920, SCREEN_HEIGHT = 1080;
 	private EntityManager entityManager;
 	private Thread thread;
 	private boolean isRunning = false;
@@ -33,17 +36,26 @@ public class Launcher extends Canvas implements Runnable {
 		 * Adding a shape component
 		 * Adding Entity to the list of entities to render
 		 */					
-		List<Component> components = new ArrayList<>();
-		components.add(new ShapeComponent(ShapeComponent.ShapeType.Box, Color.black));
-		components.add(new CollisionComponent(false));
-		components.add(new PhysicsComponent());
-		Entity character = new Entity("Test Object", SCREEN_WIDTH / 2, 0, 100, 100, components);
-		entityManager.entities.add(character);
+		Tag playerTag = new Tag("Player");
+		Tag groundTag = new Tag("Ground");
 		
-		List<Component> components1 = new ArrayList<>();
+		Random rand = new Random();
+		
+		for(int i = 0; i < 100; i++) {			
+			List<Component> components = new ArrayList<>(); List<Tag> collisionTags = new ArrayList<>();
+			collisionTags.add(groundTag);
+			components.add(new SpriteComponent(AssetImporter.characterImage));
+			components.add(new CollisionComponent(false, collisionTags));
+			components.add(new PhysicsComponent());
+			Entity character = new Entity("Test Object", rand.nextInt(SCREEN_WIDTH), 0, 50, 60, components, playerTag);
+			entityManager.entities.add(character);
+		}
+		
+		List<Component> components1 = new ArrayList<>(); List<Tag> groundCollisionTags = new ArrayList<>();
+		groundCollisionTags.add(playerTag);
 		components1.add(new ShapeComponent(ShapeComponent.ShapeType.Box, Color.black));
-		components1.add(new CollisionComponent(false));
-		Entity testEntity1 = new Entity("Test Collision Object", 0, SCREEN_HEIGHT - 100, SCREEN_WIDTH, 100, components1);
+		components1.add(new CollisionComponent(false, groundCollisionTags));
+		Entity testEntity1 = new Entity("Test Collision Object", 0, SCREEN_HEIGHT - 100, SCREEN_WIDTH, 100, components1, groundTag);
 		entityManager.entities.add(testEntity1);
 	}
 	

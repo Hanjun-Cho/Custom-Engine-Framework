@@ -3,8 +3,11 @@ package components;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 
 import entities.Entity;
+import entities.Tag;
 
 public class Component {
 
@@ -26,7 +29,8 @@ public class Component {
 	public void setColor(Color color) {this.color = color;}
 	public BufferedImage getSprite() {return sprite;}
 	public void setSprite(BufferedImage sprite) {this.sprite = sprite;}
-
+	public List<Tag> allowedTags = new ArrayList<>();
+	
 	/**
 	 * Physics Specific
 	 */
